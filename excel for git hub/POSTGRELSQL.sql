@@ -34,15 +34,7 @@ limit 20;
 -- where
 -- group by
 -- order by
--- limit
-
---QUESTION THREE (PROFIT ANALYSIS)
- select "COUNTRIES", sum("PROFIT") as "total_profit"
- from "sales_table"
- where "YEARS"= 2019
- group by "COUNTRIES"
- order by "total_profit" desc; 
-
+-- limit 
 
 
 select distinct ("SALES_REP"),"EMAILS"
@@ -107,15 +99,138 @@ where "YEARS" in (2019)
 group by "MONTHS"
 order by "percentage_profit%" desc;
 
-
-
-
---BRAND ANALYSIS QUESTION 4
-select "BRANDS", sum("QUANTITY")as "qty"
+--QUESTION 8
+select "BRANDS", sum("PROFIT") as "profit_senegal"
 from "sales_table"
-where "BRANDS" like '%malt'
+where "COUNTRIES" in ('Senegal')
+group by "BRANDS"
+order by "profit_senegal" desc
+limit 1;
+
+--BRAND ANALYSIS QUESTION 1
+select "BRANDS", sum("PROFIT") as "sales_compare"
+from
+(select *,
+case when "COUNTRIES" in ('Nigeria', 'Ghana') then 'Anglophone'
+else 'Francophone' end as "TERRITORY"
+from "sales_table") as "table_one"
+where "TERRITORY" = 'Francophone' and "YEARS" in (2019, 2018)
+group by "BRANDS"
+order by "sales_compare" desc;
+
+--QUESTION 2
+select "BRANDS", sum("QUANTITY") as "qty"
+from "sales_table"
+where "COUNTRIES" in ('Ghana')
+group by  "BRANDS"
+order by "qty" desc
+limit 2;
+
+--QUESTION 3
+select "BRANDS", sum("QUANTITY")as "qty"
+from
+(select *,
+case when "COUNTRIES" in ('Nigeria') then 'Anglophone'
+ else 'Francophone' end as "TERRITORY"
+from "sales_table") as "table_one"
+where "BRANDS" not like '%malt' and "YEARS" in (2019,2018,2017)
 group by "BRANDS"
 order by "qty" desc;
+
+
+
+--QUESTION 4
+select "BRANDS", "YEARS", sum ("QUANTITY") as "qty"
+from 
+(select *,
+case when "COUNTRIES" in ('Nigeria', 'Ghana') then 'Anglophone'
+else 'Francophone' end as "TERRITORY"
+from "sales_table") as "table1"
+where "BRANDS" like '%malt' and "TERRITORY"= 'Anglophone'
+and "YEARS" in (2018,2019)
+group by "BRANDS", "YEARS"
+order by "qty" desc;
+
+--QUESTION 5
+select "BRANDS", sum("QUANTITY") as "qty"
+from "sales_table"
+where "YEARS" in (2019)
+group by "BRANDS"
+order by "qty" desc;
+
+--QUESTION 6
+select "BRANDS", sum("QUANTITY") as "quantity"
+from
+(select *,
+case when "COUNTRIES" in ('Nigeria') then 'Anglophone'
+else 'Francophone' end as "TERRITORY"
+from "sales_table") as "table_one"
+where "REGION" in ('southsouth')
+group by "BRANDS"
+order by "quantity" desc;
+
+
+--QUESTION 7
+
+select "BRANDS", sum("QUANTITY") as "qty"
+from "sales_table"
+where "BRANDS" not like '%malt' and"COUNTRIES" in ('Nigeria')
+group by "BRANDS"
+order by "qty" desc;
+
+--QUESTION 8
+select "REGION", sum("QUANTITY") as "qty"
+from "sales_table"
+where "COUNTRIES" in ('Nigeria') and "BRANDS" in ('budweiser')
+group by "REGION"
+order by "qty";
+
+
+--QUESTION 9
+select "REGION", sum("QUANTITY") as "qty"
+from "sales_table"
+where "COUNTRIES" in ('Nigeria') and "BRANDS" in ('budweiser') and "YEARS" in (2019)
+group by "REGION"
+order by "qty";
+
+
+--SECTION C (COUNTRY ANALYSIS)
+-- QUESTION 1
+select "COUNTRIES", sum("QUANTITY") as "qty"
+from "sales_table"
+where  "BRANDS" not like '%malt' and "COUNTRIES" in ('Nigeria', 'Ghana', 'Senegal', 'Togo', 'Benin') 
+group by "COUNTRIES"
+order by "qty" desc;
+
+--QUESTION 2
+select distinct "SALES_REP", sum("PROFIT") as sales_profit
+from "sales_table"
+where "BRANDS" = 'budweiser' and "COUNTRIES" in ('Senegal')
+group by "SALES_REP"
+Order by sales_profit DESC;
+
+--QUESTION 3
+select  "COUNTRIES", sum("PROFIT") as "profit"
+from
+(select *,
+case when "MONTHS" in ('January', 'Febuary', 'March') then 'q1'
+when "MONTHS" in ('April', 'Maay', 'June') then 'q2'
+when "MONTHS" in ('July', 'August','September')then 'q3'
+else 'q4' end as "QUARTERS"
+from "sales_table") as "table1"
+group by "COUNTRIES"
+order by "profit" desc;
+
+
+
+
+
+
+
+
+
+
+
 
 
 
